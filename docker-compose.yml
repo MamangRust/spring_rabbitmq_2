@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  email-service:
+    build:
+      context: ./email-service 
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq 
+  
+  order-service:
+    build:
+      context: ./order-service 
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - rabbitmq 
+
+  stock-service:
+    build:
+      context: ./stock-service 
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - rabbitmq  
+
+  rabbitmq:
+    image: rabbitmq:3.12.8-alpine
+    ports:
+      - "5672:5672"  # AMQP port
+      - "15672:15672"  # RabbitMQ management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
